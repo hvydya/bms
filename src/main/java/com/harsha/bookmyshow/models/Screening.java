@@ -1,6 +1,7 @@
 package com.harsha.bookmyshow.models;
 
 import javax.persistence.*;
+import java.sql.Time;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -42,10 +43,13 @@ public class Screening {
 
     private Date endOfScreening;
 
+    @Column(nullable = false)
+    private Time showTime;
+
     public Screening() {
     }
 
-    public Screening(Movie movie, Date opening, Integer periodOfScreening, Screen screen) {
+    public Screening(Movie movie, Date opening, Integer periodOfScreening, Screen screen, Time showTime) {
         this.movie = movie;
         this.opening = opening;
         this.periodOfScreening = periodOfScreening;
@@ -54,6 +58,7 @@ public class Screening {
         c.setTime(opening);
         c.add(Calendar.DAY_OF_MONTH, periodOfScreening);
         this.endOfScreening = c.getTime();
+        this.showTime = showTime;
     }
 
     public Integer getId() {
@@ -104,6 +109,14 @@ public class Screening {
         this.endOfScreening = endOfScreening;
     }
 
+    public Time getShowTime() {
+        return showTime;
+    }
+
+    public void setShowTime(Time showTime) {
+        this.showTime = showTime;
+    }
+
     @Override
     public String toString() {
         return "Screening{" +
@@ -113,6 +126,7 @@ public class Screening {
                 ", periodOfScreening=" + periodOfScreening +
                 ", screen=" + screen +
                 ", endOfScreening=" + endOfScreening +
+                ", showTime=" + showTime +
                 '}';
     }
 }

@@ -1,12 +1,15 @@
 package com.harsha.bookmyshow.controllers;
 
-import com.harsha.bookmyshow.Utils;
 import com.harsha.bookmyshow.dto.GetAvailableSeatsDTO;
 import com.harsha.bookmyshow.dto.SeatBookingDTO;
 import com.harsha.bookmyshow.models.*;
 import com.harsha.bookmyshow.repositories.ScreeningRepository;
+import com.harsha.bookmyshow.repositories.SeatRepository;
 import com.harsha.bookmyshow.repositories.TicketRepository;
+import com.harsha.bookmyshow.utils.AvailableSeatsHelper;
+import com.harsha.bookmyshow.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +42,9 @@ public class BMSController {
     @Autowired
     private TicketRepository ticketRepository;
 
+    @Autowired
+    private SeatRepository seatRepository;
+
     // 1. Builtin api (/api/v0/theatre). Refer TheatreRepository.java for more details.
 
     // 2. Builtin api (/api/v0/crud_screening). Refer ScreeningRepository and Screening for more details.
@@ -56,72 +62,37 @@ public class BMSController {
     // TODO : Change this
     @Transactional(isolation = Isolation.SERIALIZABLE)
     @PostMapping(path = "/get_available_seats")
-    public List<Integer> getAvailableSeats(@RequestBody GetAvailableSeatsDTO requestBody) {
-        return new ArrayList<>(getAvailableSeatsHelper(requestBody));
-    }
-
-    private HashSet<Integer> getAvailableSeatsHelper(GetAvailableSeatsDTO requestBody) {
-        Integer screening_id = requestBody.getScreeningId();
-        Optional<Screening> optionalScreening = screeningRepository.findById(screening_id);
-        if (!optionalScreening.isPresent()) {
-            System.out.println("screening not found");
-            return new HashSet<>();
-        }
-
-        Screening screening = optionalScreening.get();
-        Date date = requestBody.getDate();
-        if (!isMovieScreeningOnDate(screening, date)) {
-            System.out.println("Movie not screening on date");
-            return new HashSet<>();
-        }
-
-        HashSet<Integer> seats = new HashSet<>();
-        List<Ticket> bookedTickets = ticketRepository.getBookedSeats(date, screening_id, requestBody.getShowTime().ordinal());
-        BitSet allBookedSeats = new BitSet();
-        for (Ticket t : bookedTickets) {
-            BitSet bs = t.getBookedSeats();
-            for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i+1)) {
-                allBookedSeats.set(i);
-            }
-        }
-        for (int i = 0; i < Screen.NUM_SEATS; i++) {
-            if (!allBookedSeats.get(i)) seats.add(i + 1);
-        }
-
+    public List<String> getAvailableSeats(@RequestBody GetAvailableSeatsDTO requestBody) {
+        List<String> seats = new ArrayList<>();
+        AvailableSeatsHelper.get(requestBody, screeningRepository, ticketRepository, seatRepository)
+                .stream().sorted().forEach(seats::add);
         return seats;
-    }
-
-    private boolean isMovieScreeningOnDate(Screening screening, Date date) {
-        Calendar c = Calendar.getInstance();
-        c.setTime(screening.getOpening());
-        c.add(Calendar.DAY_OF_MONTH, screening.getPeriodOfScreening());
-        return c.getTime().after(date);
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     @PostMapping(path = "/book_seats")
-    public Boolean bookSeats(@RequestBody SeatBookingDTO bookSeats) {
+    public ResponseEntity<String> bookSeats(@RequestBody SeatBookingDTO bookSeats) {
         Integer screening_id = bookSeats.getScreeningId();
         Date date = bookSeats.getDateOfScreening();
-        List<Integer> seatsToBook = bookSeats.getSeats();
-        ShowTime showTime = bookSeats.getShowTime();
+        List<String> seatsToBook = bookSeats.getSeats();
 
         if (!Utils.isDateInFuture(date)) {
-            return false;
+            return ResponseEntity.badRequest().body("screening for the given date is over.");
         }
 
-        BitSet seatsToBookBS = new BitSet();
-        HashSet<Integer> availableSeats = getAvailableSeatsHelper(new GetAvailableSeatsDTO(screening_id, date, showTime));
-        for (Integer seat : seatsToBook) {
+        HashSet<String> availableSeats = AvailableSeatsHelper.get(new GetAvailableSeatsDTO(screening_id, date),
+                screeningRepository, ticketRepository, seatRepository);
+
+        for (String seat : seatsToBook) {
             if (!availableSeats.contains(seat)) {
-                return false;
+                return ResponseEntity.badRequest().body("Some error occurred while booking");
             }
-            seatsToBookBS.set(seat - 1);
         }
-
-        Ticket t = new Ticket(seatsToBookBS, screeningRepository.findById(screening_id).get(), showTime, date, new Date());
+        String seats = String.join(",", seatsToBook);
+        Ticket t = new Ticket(seats, screeningRepository.findById(screening_id).get(), date, new Date());
         System.out.println(t);
         ticketRepository.save(t);
-        return true;
+
+        return ResponseEntity.ok(t.toString());
     }
 }

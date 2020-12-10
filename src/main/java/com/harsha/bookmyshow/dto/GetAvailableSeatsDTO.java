@@ -1,7 +1,6 @@
 package com.harsha.bookmyshow.dto;
 
-import com.harsha.bookmyshow.models.ShowTime;
-
+import java.sql.Time;
 import java.util.Date;
 
 /**
@@ -14,12 +13,10 @@ public class GetAvailableSeatsDTO {
 
     private Integer screeningId;
     private Date date;
-    private ShowTime showTime;
 
-    public GetAvailableSeatsDTO(Integer screeningId, Date date, ShowTime showTime) {
+    public GetAvailableSeatsDTO(Integer screeningId, Date date) {
         this.screeningId = screeningId;
         this.date = date;
-        this.showTime = showTime;
     }
 
     public GetAvailableSeatsDTO() {
@@ -39,13 +36,5 @@ public class GetAvailableSeatsDTO {
 
     public void setDate(Date date) {
         this.date = date;
-    }
-
-    public ShowTime getShowTime() {
-        return showTime;
-    }
-
-    public void setShowTime(ShowTime showTime) {
-        this.showTime = showTime;
     }
 }

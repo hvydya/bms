@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.sql.Time;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -48,6 +49,9 @@ public class SetupMockData {
     @Autowired
     ScreeningRepository screeningRepository;
 
+    @Autowired
+    SeatRepository seatRepository;
+
     public void createMockData() {
         addUsers();
         addOwners();
@@ -59,13 +63,18 @@ public class SetupMockData {
     }
 
     private void addScreens() {
-        for (int i = 0; i < modelCount; i++) {
+        for (int i = 0; i < 2; i++) {
             String screenName1 = "Screen-1";
             String screenName2 = "Screen-2";
-            Screen screen1 = screenRepository.save(new Screen(screenName1, nameToTheatre.get("Theatre-" + (i + 1))));
-            Screen screen2 = screenRepository.save(new Screen(screenName2, nameToTheatre.get("Theatre-" + (i + 1))));
+            int numOfSeats = ThreadLocalRandom.current().nextInt(50, 100);
+            Screen screen1 = screenRepository.save(new Screen(screenName1, nameToTheatre.get("Theatre-" + (i + 1)), numOfSeats));
+            Screen screen2 = screenRepository.save(new Screen(screenName2, nameToTheatre.get("Theatre-" + (i + 1)), numOfSeats));
             idToScreen.put(screen1.getId(), screen1);
             idToScreen.put(screen2.getId(), screen2);
+            for (int j = 0; j < numOfSeats; j++) {
+                seatRepository.save(new Seat((j + 1) + "", SeatType.NORMAL, screen1));
+                seatRepository.save(new Seat((j + 1) + "", SeatType.NORMAL, screen2));
+            }
         }
     }
 
@@ -73,7 +82,10 @@ public class SetupMockData {
         Date cur = new Date();
         for (Screen screen : screenRepository.findAll()) {
             int index = ThreadLocalRandom.current().nextInt(0, movies.length);
-            screeningRepository.save(new Screening(nameToMovie.get(movies[index]), cur, 20, screen));
+            int screeningTimeHourValue = ThreadLocalRandom.current().nextInt(9, 23);
+            screeningRepository.save(
+                    new Screening(nameToMovie.get(movies[index]), cur, 20, screen,
+                            Time.valueOf(screeningTimeHourValue + ":00:00")));
         }
     }
 

@@ -17,14 +17,11 @@ public class Ticket {
     private Long id;
 
     @Column(nullable = false)
-    private BitSet bookedSeats;
+    private String bookedSeats;
 
     @ManyToOne
     @JoinColumn(name = "screening_id", referencedColumnName = "id", nullable = false)
     private Screening screening;
-
-    @Column(nullable = false)
-    private ShowTime showTime;
 
     @Column(nullable = false)
     private Date screeningDate;
@@ -35,10 +32,9 @@ public class Ticket {
     public Ticket() {
     }
 
-    public Ticket(BitSet bookedSeats, Screening screening, ShowTime showTime, Date screeningDate, Date bookedDate) {
+    public Ticket(String bookedSeats, Screening screening, Date screeningDate, Date bookedDate) {
         this.bookedSeats = bookedSeats;
         this.screening = screening;
-        this.showTime = showTime;
         this.screeningDate = screeningDate;
         this.bookedDate = bookedDate;
     }
@@ -51,11 +47,11 @@ public class Ticket {
         this.id = id;
     }
 
-    public BitSet getBookedSeats() {
+    public String getBookedSeats() {
         return bookedSeats;
     }
 
-    public void setBookedSeats(BitSet bookedSeats) {
+    public void setBookedSeats(String bookedSeats) {
         this.bookedSeats = bookedSeats;
     }
 
@@ -65,14 +61,6 @@ public class Ticket {
 
     public void setScreening(Screening screening) {
         this.screening = screening;
-    }
-
-    public ShowTime getShowTime() {
-        return showTime;
-    }
-
-    public void setShowTime(ShowTime showTime) {
-        this.showTime = showTime;
     }
 
     public Date getScreeningDate() {
@@ -97,7 +85,6 @@ public class Ticket {
                 "id=" + id +
                 ", bookedSeats=" + bookedSeats +
                 ", screening=" + screening +
-                ", showTime=" + showTime +
                 ", screeningDate=" + screeningDate +
                 ", bookedDate=" + bookedDate +
                 '}';

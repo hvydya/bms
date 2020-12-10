@@ -1,4 +1,6 @@
-package com.harsha.bookmyshow;
+package com.harsha.bookmyshow.utils;
+
+import com.harsha.bookmyshow.models.Screening;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -19,5 +21,12 @@ public class Utils {
         cdate.setTime(date);
         cdate.add(Calendar.DAY_OF_MONTH, days);
         return cdate.getTime();
+    }
+
+    public static boolean isMovieScreeningOnDate(Screening screening, Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(screening.getOpening());
+        c.add(Calendar.DAY_OF_MONTH, screening.getPeriodOfScreening());
+        return c.getTime().after(date);
     }
 }

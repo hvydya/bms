@@ -17,6 +17,6 @@ import java.util.List;
 public interface TicketRepository extends CrudRepository<Ticket, Long> {
 
     @Query(value = "SELECT * FROM ticket t WHERE t.screening_id = :screening_id AND " +
-            "t.screening_date = :date AND t.show_time = :show_time", nativeQuery = true)
-    List<Ticket> getBookedSeats(@Param("date") Date date, @Param("screening_id") Integer screening_id, @Param("show_time") Integer show_time);
+            "t.screening_date = :date", nativeQuery = true)
+    List<Ticket> getBookedSeats(@Param("date") Date date, @Param("screening_id") Integer screening_id);
 }

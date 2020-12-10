@@ -6,6 +6,7 @@ Assumptions
 3. Tickets must be booked at least one day prior.
 
 Pending:
+0. Retest booking
 1. Swagger integration
 2. complete other endpoints
 3. Dockerfile and startup commands

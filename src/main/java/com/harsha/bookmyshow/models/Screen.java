@@ -8,12 +8,10 @@ import javax.persistence.*;
  */
 
 /**
- * Screen (movie hall), where the users watch the movie. A theatre can have multiple screens. Each screen has 50 seats.
+ * Screen (movie hall), where the users watch the movie. A theatre can have multiple screens.
  */
 @Entity
 public class Screen {
-
-    public static final Integer NUM_SEATS = 50;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,9 +24,13 @@ public class Screen {
     @JoinColumn(name="theatre_id", referencedColumnName = "id", nullable = false)
     private Theatre theatre;
 
-    public Screen(String name, Theatre theatre) {
+    @Column(nullable = false)
+    private Integer numberOfSeats;
+
+    public Screen(String name, Theatre theatre, Integer numberOfSeats) {
         this.name = name;
         this.theatre = theatre;
+        this.numberOfSeats = numberOfSeats;
     }
 
     public Integer getId() {
@@ -52,12 +54,6 @@ public class Screen {
     }
 
     public void setTheater(Theatre theatre) {
-        this.theatre = theatre;
-    }
-
-    public Screen(Integer id, String name, Theatre theatre) {
-        this.id = id;
-        this.name = name;
         this.theatre = theatre;
     }
 
