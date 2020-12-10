@@ -1,7 +1,6 @@
 package com.harsha.bookmyshow.models;
 
 import javax.persistence.*;
-import java.util.BitSet;
 import java.util.Date;
 
 /**
@@ -9,6 +8,9 @@ import java.util.Date;
  * created by: harsha
  */
 
+/**
+ * The ticket given to the user on booking seats for a movie.
+ */
 @Entity
 public class Ticket {
 
@@ -16,6 +18,9 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    /**
+     * Stored in DB as comma-separated string.
+     */
     @Column(nullable = false)
     private String bookedSeats;
 
@@ -23,9 +28,15 @@ public class Ticket {
     @JoinColumn(name = "screening_id", referencedColumnName = "id", nullable = false)
     private Screening screening;
 
+    /**
+     * The date on which the movie can be viewed or the user is suppose to view.
+     */
     @Column(nullable = false)
     private Date screeningDate;
 
+    /**
+     * The date on which this ticket was created.
+     */
     @Column(nullable = false)
     private Date bookedDate;
 

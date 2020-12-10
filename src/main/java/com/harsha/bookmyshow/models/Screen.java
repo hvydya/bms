@@ -57,6 +57,32 @@ public class Screen {
         this.theatre = theatre;
     }
 
+    public Theatre getTheatre() {
+        return theatre;
+    }
+
+    public void setTheatre(Theatre theatre) {
+        this.theatre = theatre;
+    }
+
+    @Override
+    public String toString() {
+        return "Screen{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", theatre=" + theatre +
+                ", numberOfSeats=" + numberOfSeats +
+                '}';
+    }
+
+    public Integer getNumberOfSeats() {
+        return numberOfSeats;
+    }
+
+    public void setNumberOfSeats(Integer numberOfSeats) {
+        this.numberOfSeats = numberOfSeats;
+    }
+
     public Screen() {
     }
 }

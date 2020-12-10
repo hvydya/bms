@@ -5,6 +5,9 @@ package com.harsha.bookmyshow.models;
  * created by: harsha
  */
 
+/**
+ * Types of seats
+ */
 public enum SeatType {
     NORMAL
 }

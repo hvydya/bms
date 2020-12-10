@@ -8,7 +8,7 @@ import javax.persistence.*;
  */
 
 /**
- * A city in a country.
+ * A city somewhere.
  */
 @Entity
 public class City {
@@ -46,5 +46,13 @@ public class City {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "City{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

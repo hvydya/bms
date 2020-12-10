@@ -8,7 +8,7 @@ import javax.persistence.*;
  */
 
 /**
- * The customer who will want to book seats for watching {@link Movie}s.
+ * The user who will want to book seats for watching {@link Movie}s.
  */
 @Entity
 public class User {

@@ -7,6 +7,9 @@ import javax.persistence.*;
  * created by: harsha
  */
 
+/**
+ * A seat in a screen(movie hall).
+ */
 @Entity
 public class Seat {
 
@@ -14,6 +17,9 @@ public class Seat {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    /**
+     * The seat's number in the screen.
+     */
     @Column(nullable = false)
     private String number;
 
@@ -70,5 +76,15 @@ public class Seat {
 
     public void setScreen(Screen screen) {
         this.screen = screen;
+    }
+
+    @Override
+    public String toString() {
+        return "Seat{" +
+                "id=" + id +
+                ", number='" + number + '\'' +
+                ", type=" + type +
+                ", screen=" + screen +
+                '}';
     }
 }

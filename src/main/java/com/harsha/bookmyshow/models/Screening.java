@@ -12,9 +12,8 @@ import java.util.Date;
 
 /**
  * Screening of the movie in a theatre.
- * Every screening has 3 times. The movie will be played at this screen at all three times.
- * This is to simplify the design for running movies in a theatre. Otherwise would require complex logic to map show
- * timings and track them and prevent overlaps from happening.
+ * The scheduling related to movies' screening is not handled. This means overlaps are possible. It's the
+ * admin's responsibility to make sure overlaps don't occur.
  */
 @Entity
 public class Screening {
@@ -27,6 +26,9 @@ public class Screening {
     @JoinColumn(name="movie_id", nullable = false)
     private Movie movie;
 
+    /**
+     * The date on which the movie opens
+     */
     @Column(nullable = false)
     private Date opening;
 
@@ -41,8 +43,14 @@ public class Screening {
     @JoinColumn(name="screen_id", nullable = false)
     private Screen screen;
 
+    /**
+     * Auto-populated. For convenience only.
+     */
     private Date endOfScreening;
 
+    /**
+     * The time at which the movie starts screening daily.
+     */
     @Column(nullable = false)
     private Time showTime;
 

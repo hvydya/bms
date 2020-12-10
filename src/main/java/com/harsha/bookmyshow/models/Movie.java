@@ -17,7 +17,7 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     public Integer getId() {
@@ -41,5 +41,13 @@ public class Movie {
     }
 
     public Movie() {
+    }
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

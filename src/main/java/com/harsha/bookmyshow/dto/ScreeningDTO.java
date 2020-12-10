@@ -1,7 +1,6 @@
 package com.harsha.bookmyshow.dto;
 
-import com.harsha.bookmyshow.models.Screen;
-
+import java.sql.Time;
 import java.util.Date;
 
 /**
@@ -14,15 +13,17 @@ public class ScreeningDTO {
     private Integer period_of_screening;
     private Date opening;
     private Integer screen_id;
+    private Time showTime;
 
     public ScreeningDTO() {
     }
 
-    public ScreeningDTO(Integer movie_id, Integer period_of_screening, Date opening, Integer screen_id) {
+    public ScreeningDTO(Integer movie_id, Integer period_of_screening, Date opening, Integer screen_id, Time showTime) {
         this.movie_id = movie_id;
         this.period_of_screening = period_of_screening;
         this.opening = opening;
         this.screen_id = screen_id;
+        this.showTime = showTime;
     }
 
     public Integer getMovie_id() {
@@ -57,6 +58,14 @@ public class ScreeningDTO {
         this.screen_id = screen_id;
     }
 
+    public Time getShowTime() {
+        return showTime;
+    }
+
+    public void setShowTime(Time showTime) {
+        this.showTime = showTime;
+    }
+
     @Override
     public String toString() {
         return "ScreeningDTO{" +
@@ -64,6 +73,7 @@ public class ScreeningDTO {
                 ", period_of_screening=" + period_of_screening +
                 ", opening=" + opening +
                 ", screen_id=" + screen_id +
+                ", showTime=" + showTime +
                 '}';
     }
 }

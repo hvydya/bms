@@ -4,6 +4,7 @@ package com.harsha.bookmyshow.dto;
  * created on: 10/12/20
  * created by: harsha
  */
+
 public class TheatreDTO {
 
     private String name;
