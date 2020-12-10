@@ -1,8 +1,8 @@
 package com.harsha.bookmyshow.models;
 
 import javax.persistence.*;
-import java.sql.Date;
-import java.util.BitSet;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * created on: 05/12/20
@@ -23,49 +23,37 @@ public class Screening {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name="movie_id")
+    @JoinColumn(name="movie_id", nullable = false)
     private Movie movie;
 
+    @Column(nullable = false)
     private Date opening;
 
+    /**
+     * The number of days the movie will be screened.
+     */
+    @Column(nullable = false)
     private Integer periodOfScreening;
 
     // One show is only mapped to one screen at any given point of time. TODO Need to block this from schema level. Add validation in logic.
     @ManyToOne
-    @JoinColumn(name="screen_id")
+    @JoinColumn(name="screen_id", nullable = false)
     private Screen screen;
 
-    private BitSet seats;
+    private Date endOfScreening;
 
-    private ShowTime showTime;
+    public Screening() {
+    }
 
-    public Screening(Integer id, Movie movie, Date opening, Integer periodOfScreening, Screen screen, ShowTime showTime) {
-        this.id = id;
+    public Screening(Movie movie, Date opening, Integer periodOfScreening, Screen screen) {
         this.movie = movie;
         this.opening = opening;
         this.periodOfScreening = periodOfScreening;
         this.screen = screen;
-        this.showTime = showTime;
-        seats = new BitSet(Screen.NUM_SEATS);
-    }
-
-    public BitSet getSeats() {
-        return seats;
-    }
-
-    public void setSeats(BitSet seats) {
-        this.seats = seats;
-    }
-
-    public ShowTime getShowTime() {
-        return showTime;
-    }
-
-    public void setShowTime(ShowTime showTime) {
-        this.showTime = showTime;
-    }
-
-    public Screening() {
+        Calendar c = Calendar.getInstance();
+        c.setTime(opening);
+        c.add(Calendar.DAY_OF_MONTH, periodOfScreening);
+        this.endOfScreening = c.getTime();
     }
 
     public Integer getId() {
@@ -106,5 +94,25 @@ public class Screening {
 
     public void setScreen(Screen screen) {
         this.screen = screen;
+    }
+
+    public Date getEndOfScreening() {
+        return endOfScreening;
+    }
+
+    public void setEndOfScreening(Date endOfScreening) {
+        this.endOfScreening = endOfScreening;
+    }
+
+    @Override
+    public String toString() {
+        return "Screening{" +
+                "id=" + id +
+                ", movie=" + movie +
+                ", opening=" + opening +
+                ", periodOfScreening=" + periodOfScreening +
+                ", screen=" + screen +
+                ", endOfScreening=" + endOfScreening +
+                '}';
     }
 }

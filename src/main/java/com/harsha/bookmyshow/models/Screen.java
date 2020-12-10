@@ -19,11 +19,17 @@ public class Screen {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @Column(nullable = false)
     private String name;
 
     @ManyToOne
-    @JoinColumn(name="theatre_id", referencedColumnName = "id")
+    @JoinColumn(name="theatre_id", referencedColumnName = "id", nullable = false)
     private Theatre theatre;
+
+    public Screen(String name, Theatre theatre) {
+        this.name = name;
+        this.theatre = theatre;
+    }
 
     public Integer getId() {
         return id;

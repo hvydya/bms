@@ -18,15 +18,22 @@ public class Theatre {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @Column(unique = true, nullable = false)
     private String name;
 
     @ManyToOne
-    @JoinColumn(name="city_id", referencedColumnName = "id")
+    @JoinColumn(name="city_id", referencedColumnName = "id", nullable = false)
     private City city;
 
     @ManyToOne
-    @JoinColumn(name="owner_id", referencedColumnName = "id")
+    @JoinColumn(name="owner_id", referencedColumnName = "id", nullable = false)
     private Owner owner;
+
+    public Theatre(String name, City city, Owner owner) {
+        this.city = city;
+        this.name = name;
+        this.owner = owner;
+    }
 
     public Integer getId() {
         return id;
@@ -68,5 +75,15 @@ public class Theatre {
     }
 
     public Theatre() {
+    }
+
+    @Override
+    public String toString() {
+        return "Theatre{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", city=" + city +
+                ", owner=" + owner +
+                '}';
     }
 }

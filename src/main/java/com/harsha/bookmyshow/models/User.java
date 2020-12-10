@@ -17,13 +17,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer Id;
 
+    @Column(nullable = false)
     private String name;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
-    public User(Integer id, String name, String email) {
-        Id = id;
+    public User(String name, String email) {
         this.name = name;
         this.email = email;
     }

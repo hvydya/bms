@@ -1,6 +1,5 @@
-package com.harsha.bookmyshow.controllers;
+package com.harsha.bookmyshow.dto;
 
-import com.harsha.bookmyshow.models.BookingRequest;
 import com.harsha.bookmyshow.models.ShowTime;
 
 import java.sql.Date;
@@ -10,7 +9,7 @@ import java.util.List;
  * created on: 07/12/20
  * created by: harsha
  */
-public class BookSeats {
+public class SeatBookingDTO {
 
     private Integer screeningId;
 
@@ -18,7 +17,17 @@ public class BookSeats {
 
     private Date dateOfScreening;
 
-    public BookSeats() {
+    private ShowTime showTime;
+
+    public ShowTime getShowTime() {
+        return showTime;
+    }
+
+    public void setShowTime(ShowTime showTime) {
+        this.showTime = showTime;
+    }
+
+    public SeatBookingDTO() {
     }
 
     public Date getDateOfScreening() {
@@ -29,7 +38,7 @@ public class BookSeats {
         this.dateOfScreening = dateOfScreening;
     }
 
-    public BookSeats(Integer screeningId, List<Integer> seats) {
+    public SeatBookingDTO(Integer screeningId, List<Integer> seats) {
         this.screeningId = screeningId;
         this.seats = seats;
     }
@@ -48,5 +57,15 @@ public class BookSeats {
 
     public void setSeats(List<Integer> seats) {
         this.seats = seats;
+    }
+
+    @Override
+    public String toString() {
+        return "BookSeats{" +
+                "screeningId=" + screeningId +
+                ", seats=" + seats +
+                ", dateOfScreening=" + dateOfScreening +
+                ", showTime=" + showTime +
+                '}';
     }
 }

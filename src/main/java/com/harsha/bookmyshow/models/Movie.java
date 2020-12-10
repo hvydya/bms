@@ -1,9 +1,6 @@
 package com.harsha.bookmyshow.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * created on: 05/12/20
@@ -20,6 +17,7 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @Column(nullable = false)
     private String name;
 
     public Integer getId() {
@@ -38,8 +36,7 @@ public class Movie {
         this.name = name;
     }
 
-    public Movie(Integer id, String name) {
-        this.id = id;
+    public Movie(String name) {
         this.name = name;
     }
 
