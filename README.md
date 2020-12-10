@@ -1,14 +1,33 @@
+# Book My Show
 This is the backend for demo book my show. Written using Spring Boot, MySQL, Docker.
 
-Assumptions
-1. Only 3 show-times (i.e Morning, Matinee, Night) per screen.
-2. Every screen has 50 seats max.
-3. Tickets must be booked at least one day prior.
+## To run the demo:
+- First run db: The db is exposed to the system on port `13306`. username `root`. password `root_pass`. To use adminer `http://localhost:18080`.
+```
+docker-compose up
+```
+- Then run the demo backend
+```
+./mvnw clean install
+./mvnw spring-boot:run
+```
+- Then open `http://localhost:8080/swagger-ui.html#/`
 
-Pending:
-0. Retest booking
-1. Swagger integration
-2. complete other endpoints
-3. Dockerfile and startup commands
-4. Final refactoring + docs
-5. Auth
+## To stop the demo
+- Stop the backend service (ctrl-c)
+- To stop docker compose
+```
+docker-compose down
+docker volume rm bookmyshow_db_data
+```
+
+## API flow for booking tickets
+Use the bms controller to book tickets. (Open [swagger page](http://localhost:8080/swagger-ui.html#/) to check it out).
+
+## Notes:
+- The ticket booking concurrency is handled by using the db's `SERIALIZABLE` level of Isolation. Refer [this](https://en.wikipedia.org/wiki/Isolation_(database_systems)) link. Topic: `Isolation levels`. 
+- Screening overlaps are to be handled by user who creates shows.
+- Tickets must be booked at least one day prior.
+- No auth.
+- No logging.
+- No tests.
